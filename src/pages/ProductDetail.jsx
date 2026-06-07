@@ -2,14 +2,18 @@ import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ShoppingCart, ShieldCheck, Truck, RotateCcw, AlertTriangle, ArrowLeft } from 'lucide-react';
 import api from '../api/api';
+import Toast from '../components/UI/Toats';
+import { useToast } from '../hooks/useToast';
 
 export default function ProductDetail() {
-  const { id } = useParams();
+  const { slug } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
+  const {toast, showToast}  = useToast()
+
 
   useEffect(() => {
     const controller = new AbortController();
@@ -17,7 +21,7 @@ export default function ProductDetail() {
     const fetchProductDetail = async () => {
       setLoading(true);
       try {
-        const res = await api.get(`/products/${id}`, {
+        const res = await api.get(`/products/${slug}`, {
           signal: controller.signal
         });
         setProduct(res.data.data || res.data);
@@ -29,23 +33,23 @@ export default function ProductDetail() {
       }
     };
 
-    if (id) fetchProductDetail();
+    if (slug) fetchProductDetail();
     return () => controller.abort();
-  }, [id]);
+  }, [slug]);
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-canvas-cream flex items-center justify-center font-display text-lg tracking-widest text-shade-50">
-        LOADING ARCHITECTURAL ASSET...
+      <div className="min-h-screen bg-white flex items-center justify-center font-mono text-xs uppercase tracking-widest text-stone-400 animate-pulse">
+        Loading product information...
       </div>
     );
   }
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-canvas-cream flex flex-col items-center justify-center gap-4">
-        <p className="font-body text-shade-60">Product asset could not be resolved.</p>
-        <Link to="/catalog" className="text-sm font-mono uppercase underline tracking-wider">
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center gap-3 px-4">
+        <p className="font-serif font-bold text-xl text-stone-800">Product could not be found</p>
+        <Link to="/catalog" className="text-xs font-mono uppercase tracking-wider text-sky-600 hover:underline">
           Return to Catalog
         </Link>
       </div>
@@ -66,32 +70,32 @@ export default function ProductDetail() {
     minimumFractionDigits: 0
   }).format(Number(product.price) * quantity);
 
-const handleAddToCart = async () => {
-  setIsAdding(true);
-  try {
-    await api.post('/cart', {
-      productId: product.id,
-      quantity: quantity,
-    });
-    alert('Added to cart!');
-  } catch (err) {
-    console.log('Full error:', err.response?.data)
-    // Show the actual error instead of redirecting
-    alert(err.response?.data?.message || JSON.stringify(err.response?.data) || 'Failed to add to cart')
-  } finally {
-    setIsAdding(false);
-  }
-};
+  const handleAddToCart = async () => {
+    setIsAdding(true);
+    try {
+      await api.post('/cart', {
+        productId: product.id,
+        quantity: quantity,
+      });
+      showToast('Added to cart!')
+    } catch (err) {
+      console.log('Full error:', err.response?.data)
+      // showToast(err.response?.data?.message || JSON.stringify(err.response?.data) || 'Failed to add to cart')
+    } finally {
+      setIsAdding(false);
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-canvas-cream text-black font-body selection:bg-aloe py-12" style={{ fontFeatureSettings: '"ss03"' }}>
-      <div className="max-w-7xl mx-auto px-8">
+    <div className="min-h-screen bg-white text-stone-800 antialiased py-12">
+      <Toast toast={toast} />
+      <div className="max-w-6xl mx-auto px-4 sm:px-8">
 
-        {/* Breadcrumb */}
+        {/* Breadcrumb - Bersih & Minimalis */}
         <div className="mb-8">
           <Link
             to="/catalog"
-            className="inline-flex items-center gap-2 text-xs font-mono tracking-wider text-shade-50 hover:text-black transition-colors"
+            className="inline-flex items-center gap-2 text-xs font-mono font-bold tracking-wider text-stone-400 hover:text-stone-900 transition-colors"
           >
             <ArrowLeft size={14} />
             BACK TO CATALOG
@@ -99,82 +103,77 @@ const handleAddToCart = async () => {
         </div>
 
         {/* Main Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-start">
 
-          {/* Left: Product Image */}
-          <div className="lg:col-span-7">
-            <div className="bg-canvas-light rounded-lg overflow-hidden border border-hairline-light aspect-square flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.01)]">
-              <img src={productImage} alt={product.name} className="w-full h-full object-cover" />
+          {/* Left: Product Image & SKU */}
+          <div className="md:col-span-6 lg:col-span-7">
+            <div className="bg-stone-50 rounded-2xl overflow-hidden border border-stone-100 aspect-square flex items-center justify-center">
+              <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
             </div>
-            <div className="mt-3 text-right">
-              <span className="text-[10px] font-mono text-shade-40 uppercase tracking-widest">
+            <div className="mt-3 text-left pl-1">
+              <span className="text-[10px] font-mono text-stone-400 uppercase tracking-widest">
                 SKU-SLUG: {product.slug}
               </span>
             </div>
           </div>
 
           {/* Right: Transaction Panel */}
-          <div className="lg:col-span-5 flex flex-col justify-between min-h-[500px]">
+          <div className="md:col-span-6 lg:col-span-5 flex flex-col gap-6">
             <div>
               {product.category?.name && (
-                <Link
-                  to="/catalog"
-                  className="inline-block bg-aloe text-black text-xs uppercase tracking-widest font-semibold px-3 py-1 rounded-pill mb-4 hover:opacity-80 transition-opacity"
-                >
+                <span className="inline-block bg-stone-100 text-stone-800 text-[10px] uppercase tracking-widest font-bold px-2.5 py-1 rounded-md mb-3">
                   {product.category.name}
-                </Link>
+                </span>
               )}
 
-              <h1 className="font-display text-3xl lg:text-4xl font-normal tracking-tight leading-tight mb-4">
+              <h1 className="font-serif text-3xl font-bold text-stone-900 leading-tight mb-2">
                 {product.name}
               </h1>
 
-              <div className="mb-6">
-                <div className="text-2xl font-normal font-display text-black">{formattedPrice}</div>
-              </div>
+              <div className="text-xl font-mono font-bold text-stone-900">{formattedPrice}</div>
 
-              <hr className="border-hairline-light my-6" />
+              <div className="border-t border-stone-100 my-5" />
 
-              <div className="mb-8">
-                <h3 className="text-xs uppercase tracking-widest text-shade-50 font-semibold mb-2">Description</h3>
-                <p className="text-shade-60 text-base leading-relaxed font-normal">
-                  {product.description || "No description provided for this architectural asset."}
+              <div className="mb-2">
+                <h3 className="text-xs uppercase tracking-wider text-stone-400 font-bold mb-1.5">Description</h3>
+                <p className="text-stone-600 text-sm leading-relaxed">
+                  {product.description || "No description provided for this product."}
                 </p>
               </div>
             </div>
 
-            {/* Purchase Action Box */}
-            <div className="bg-canvas-light border border-hairline-light rounded-lg p-6 shadow-[0_8px_8px_rgba(0,0,0,0.02),0_4px_4px_rgba(0,0,0,0.02),0_0_0_1px_rgba(0,0,0,0.02)]">
-              <div className="flex items-center justify-between mb-6">
-                <span className="text-sm font-medium text-shade-60">Inventory Status</span>
+            {/* Purchase Action Box - Sesuai dengan gaya panel filter / box putih polos */}
+            <div className="bg-white border border-stone-200 rounded-2xl p-5 shadow-xs">
+              <div className="flex items-center justify-between mb-5">
+                <span className="text-xs font-mono font-bold text-stone-400 uppercase tracking-wider">Status</span>
                 {product.stock > 0 ? (
-                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-pill bg-pistachio text-black">
+                  <span className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-emerald-600 bg-emerald-50/50 px-2.5 py-1 rounded-lg">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    {product.stock} units available
+                    {product.stock} units left
                   </span>
                 ) : (
-                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-pill bg-shade-30 text-shade-60">
+                  <span className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-stone-400 bg-stone-50 px-2.5 py-1 rounded-lg">
                     <AlertTriangle size={12} /> Out of Stock
                   </span>
                 )}
               </div>
 
               {product.stock > 0 && (
-                <div className="flex items-center justify-between mb-6 border-b border-hairline-light pb-4">
-                  <span className="text-sm font-medium text-shade-60">Select Quantity</span>
-                  <div className="flex items-center border border-hairline-light rounded-pill p-1 bg-canvas-cream">
+                <div className="flex items-center justify-between mb-5 border-t border-stone-100 pt-4">
+                  <span className="text-xs font-mono font-bold text-stone-400 uppercase tracking-wider">Quantity</span>
+                  <div className="flex items-center border border-stone-200 rounded-lg p-1 bg-stone-50">
                     <button
                       onClick={() => setQuantity(Math.max(1, quantity - 1))}
                       disabled={quantity <= 1}
-                      className="w-8 h-8 rounded-pill flex items-center justify-center hover:bg-shade-30 text-base transition-colors cursor-pointer disabled:opacity-30 font-mono"
+                      className="w-7 h-7 rounded-md flex items-center justify-center hover:bg-white text-stone-600 transition-colors disabled:opacity-30 font-mono text-sm"
                     >
                       -
                     </button>
-                    <span className="w-10 text-center font-semibold text-sm font-mono">{quantity}</span>
+                    <span className="w-9 text-center font-bold text-xs font-mono text-stone-800">{quantity}</span>
                     <button
                       onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
                       disabled={quantity >= product.stock}
-                      className="w-8 h-8 rounded-pill flex items-center justify-center hover:bg-shade-30 text-base transition-colors cursor-pointer disabled:opacity-30 font-mono"
+                      className="w-7 h-7 rounded-md flex items-center justify-center hover:bg-white text-stone-600 transition-colors disabled:opacity-30 font-mono text-sm"
                     >
                       +
                     </button>
@@ -182,31 +181,33 @@ const handleAddToCart = async () => {
                 </div>
               )}
 
+              {/* Tombol Utama Hitam Minimalis */}
               <button
                 onClick={handleAddToCart}
                 disabled={product.stock === 0 || isAdding}
-                className={`w-full font-medium py-3 px-6 rounded-pill text-sm transition-all duration-200 text-center flex items-center justify-center gap-2 cursor-pointer ${
+                className={`w-full font-mono text-xs font-bold py-3 px-6 rounded-lg transition-colors text-center flex items-center justify-center gap-2 ${
                   product.stock === 0
-                    ? 'bg-shade-30 text-shade-50 cursor-not-allowed'
-                    : 'bg-black text-white hover:bg-shade-70 active:scale-[0.99]'
+                    ? 'bg-stone-100 text-stone-400 cursor-not-allowed'
+                    : 'bg-stone-950 text-white hover:bg-stone-800 active:bg-stone-900'
                 }`}
               >
-                <ShoppingCart size={16} />
-                {isAdding ? 'Securing Item...' : `Add to Cart — ${totalPrice}`}
+                <ShoppingCart size={14} />
+                {isAdding ? 'ADDING TO CART...' : `ADD TO CART — ${totalPrice}`}
               </button>
 
-              <div className="grid grid-cols-3 gap-2 mt-6 border-t border-hairline-light pt-4 text-center">
+              {/* Minimalist Trust Badges */}
+              <div className="grid grid-cols-3 gap-2 mt-5 border-t border-stone-100 pt-4 text-center">
                 <div className="flex flex-col items-center gap-1">
-                  <Truck size={14} className="text-shade-60" />
-                  <span className="text-[10px] font-medium text-shade-50 uppercase tracking-tight">Free Delivery</span>
+                  <Truck size={14} className="text-stone-400" />
+                  <span className="text-[10px] font-mono text-stone-500 font-medium">Free Shipping</span>
                 </div>
                 <div className="flex flex-col items-center gap-1">
-                  <ShieldCheck size={14} className="text-shade-60" />
-                  <span className="text-[10px] font-medium text-shade-50 uppercase tracking-tight">Genuine Product</span>
+                  <ShieldCheck size={14} className="text-stone-400" />
+                  <span className="text-[10px] font-mono text-stone-500 font-medium">Original Asset</span>
                 </div>
                 <div className="flex flex-col items-center gap-1">
-                  <RotateCcw size={14} className="text-shade-60" />
-                  <span className="text-[10px] font-medium text-shade-50 uppercase tracking-tight">Easy Returns</span>
+                  <RotateCcw size={14} className="text-stone-400" />
+                  <span className="text-[10px] font-mono text-stone-500 font-medium">Easy Returns</span>
                 </div>
               </div>
 

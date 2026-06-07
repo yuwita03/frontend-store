@@ -3,7 +3,7 @@ import Badge from '../ui/Badge'
 
 function ProductCard({ product }) {
   return (
-    <Link to={`/product/${product.id}`} className="group">
+    <Link to={`/product/${product.slug}`} className="group">
       <div className="flex flex-col gap-3">
 
         {/* Image */}
@@ -11,7 +11,7 @@ function ProductCard({ product }) {
           <img
             src={product.image}
             alt={product.name}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-125"
           />
         </div>
 
@@ -27,7 +27,7 @@ function ProductCard({ product }) {
             {product.name}
           </h3>
           <p className="font-body text-sm text-shade-60">
-            ${product.price?.toLocaleString()}
+            Rp. {product.price?.toLocaleString()}
           </p>
         </div>
 

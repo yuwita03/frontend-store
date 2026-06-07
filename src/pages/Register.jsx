@@ -29,7 +29,12 @@ function Register() {
       await api.post('/users', form)
       navigate('/login')
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed')
+      console.log(JSON.stringify(err.response?.data))
+      setError(
+  err.response?.data?.message ||
+  err.response?.data?.errors ||
+  'Registration failed'
+)
     } finally {
       setLoading(false)
     }

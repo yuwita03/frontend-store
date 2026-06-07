@@ -11,44 +11,58 @@ function Navbar() {
 
   const isDark = location.pathname === '/';
 
-
-  // Mengelompokkan class dinamis agar JSX tetap bersih
+  // Mengelompokkan class dinamis agar sinkron dengan tema stone/minimalis
   const navBaseClass = `w-full px-8 py-4 flex items-center justify-between transition-colors duration-200 ${
     isDark 
-      ? 'bg-canvas-night text-canvas-light' 
-      : 'bg-canvas-light text-canvas-night border-b border-hairline-light'
+      ? 'bg-stone-900 text-stone-50' 
+      : 'bg-white text-stone-900 border-b border-stone-200'
   }`;
 
-  const mobileMenuClass = `absolute top-16 left-0 w-full z-50 px-8 py-6 flex flex-col gap-4 ${
+  const mobileMenuClass = `absolute top-16 left-0 w-full z-50 px-8 py-6 flex flex-col gap-4 shadow-lg ${
     isDark 
-      ? 'bg-canvas-night' 
-      : 'bg-canvas-light border-b border-hairline-light'
+      ? 'bg-stone-900' 
+      : 'bg-white border-b border-stone-200'
   }`;
 
   return (
     <nav className={navBaseClass}>
       {/* Logo */}
-      <Link to="/" className="font-display text-xl font-medium tracking-tight">
+      <Link to="/" className="font-serif text-xl font-black tracking-tight">
         MyStore
       </Link>
 
-      {/* Desktop Navigation */}
-{/* Desktop Links */}
-    <div className="hidden md:flex items-center gap-8">
-      <Link to="/" className="font-body text-sm text-shade-50 hover:text-canvas-light transition-colors">
-        Home
-      </Link>
-      <Link to="/catalog" className="font-body text-sm text-shade-50 hover:text-canvas-light transition-colors">
-        Catalog
-      </Link>
-      <Link to="/orders" className="font-body text-sm text-shade-50 hover:text-canvas-light transition-colors">
-        Orders
-      </Link>
-    </div>
+      {/* Desktop Navigation Links */}
+      <div className="hidden md:flex items-center gap-8">
+        <Link 
+          to="/" 
+          className={`font-mono text-sm transition-colors ${
+            isDark ? 'text-stone-400 hover:text-stone-100' : 'text-stone-600 hover:text-stone-900'
+          }`}
+        >
+          Home
+        </Link>
+        <Link 
+          to="/catalog" 
+          className={`font-mono text-sm transition-colors ${
+            isDark ? 'text-stone-400 hover:text-stone-100' : 'text-stone-600 hover:text-stone-900'
+          }`}
+        >
+          Catalog
+        </Link>
+        <Link 
+          to="/orders" 
+          className={`font-mono text-sm transition-colors ${
+            isDark ? 'text-stone-400 hover:text-stone-100' : 'text-stone-600 hover:text-stone-900'
+          }`}
+        >
+          Orders
+        </Link>
+      </div>
+
       {/* Desktop Actions */}
       <div className="hidden md:flex items-center gap-4">
         <Link to="/cart" className="p-1 hover:opacity-80 transition-opacity">
-          <ShoppingCart size={20} className={isDark ? 'text-canvas-light' : 'text-canvas-night'} />
+          <ShoppingCart size={20} className={isDark ? 'text-stone-50' : 'text-stone-900'} />
         </Link>
         
         {isAuthenticated ? (
@@ -64,7 +78,7 @@ function Navbar() {
         )}
       </div>
 
-      {/* Humberger Menu */}
+      {/* Hamburger Menu Trigger */}
       <button 
         className="md:hidden p-1 focus:outline-none" 
         onClick={() => setMenuOpen(!menuOpen)}
@@ -73,54 +87,55 @@ function Navbar() {
       </button>
 
       {/* Hamburger Menu Links */}
-{/* Hamburger Menu Links */}
-{menuOpen && (
-  <div className={`${mobileMenuClass} flex flex-col items-center justify-center text-center gap-4 p-6`}>
-    {/* Navigasi Utama Seluler */}
-    <div className="flex flex-col items-center gap-4 w-full">
-      <Link 
-        to="/" 
-        onClick={() => setMenuOpen(false)} 
-        className="font-body text-base text-shade-50 hover:text-canvas-light transition-colors py-2 w-full block text-center"
-      >
-        Home
-      </Link>
-      <Link 
-        to="/catalog" 
-        onClick={() => setMenuOpen(false)} 
-        className="font-body text-base text-shade-50 hover:text-canvas-light transition-colors py-2 w-full block text-center"
-      >
-        Catalog
-      </Link>
-    </div>
+      {menuOpen && (
+        <div className={`${mobileMenuClass} flex flex-col items-center justify-center text-center gap-4 p-6`}>
+          {/* Navigasi Utama Seluler */}
+          <div className="flex flex-col items-center gap-4 w-full">
+            <Link 
+              to="/" 
+              onClick={() => setMenuOpen(false)} 
+              className={`font-mono text-base transition-colors py-2 w-full block text-center ${
+                isDark ? 'text-stone-400 hover:text-stone-100' : 'text-stone-600 hover:text-stone-900'
+              }`}
+            >
+              Home
+            </Link>
+            <Link 
+              to="/catalog" 
+              onClick={() => setMenuOpen(false)} 
+              className={`font-mono text-base transition-colors py-2 w-full block text-center ${
+                isDark ? 'text-stone-400 hover:text-stone-100' : 'text-stone-600 hover:text-stone-900'
+              }`}
+            >
+              Catalog
+            </Link>
+          </div>
 
-    {/* Tombol Keranjang */}
-    <Link to="/cart" onClick={() => setMenuOpen(false)} className="w-full mt-2">
-      <Button variant={isDark ? 'outline_dark' : 'outline_light'} className="w-full mx-auto">
-        Cart
-      </Button>
-    </Link>
-    
-    {/* Tombol Otentikasi */}
-    {isAuthenticated ? (
-      <Button 
-        variant={isDark ? 'outline_dark' : 'outline_light'} 
-        onClick={() => { logout(); setMenuOpen(false); }} 
-        className="w-full mx-auto"
-      >
-        Logout
-      </Button>
-    ) : (
-      <Link to="/login" onClick={() => setMenuOpen(false)} className="w-full">
-        <Button variant={isDark ? 'outline_dark' : 'outline_light'} className="w-full mx-auto">
-          Login
-        </Button>
-      </Link>
-    )}
-  </div>
-)}
-
-
+          {/* Tombol Keranjang Seluler */}
+          <Link to="/cart" onClick={() => setMenuOpen(false)} className="w-full mt-2">
+            <Button variant={isDark ? 'outline_dark' : 'outline_light'} className="w-full mx-auto">
+              Cart
+            </Button>
+          </Link>
+          
+          {/* Tombol Otentikasi Seluler */}
+          {isAuthenticated ? (
+            <Button 
+              variant={isDark ? 'outline_dark' : 'outline_light'} 
+              onClick={() => { logout(); setMenuOpen(false); }} 
+              className="w-full mx-auto"
+            >
+              Logout
+            </Button>
+          ) : (
+            <Link to="/login" onClick={() => setMenuOpen(false)} className="w-full">
+              <Button variant={isDark ? 'outline_dark' : 'outline_light'} className="w-full mx-auto">
+                Login
+              </Button>
+            </Link>
+          )}
+        </div>
+      )}
     </nav>
   );
 }

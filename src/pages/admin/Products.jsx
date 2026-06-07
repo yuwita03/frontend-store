@@ -19,8 +19,10 @@ function AdminProducts() {
     stock: '',
     categoryId: '',
     image: '',
+    slug: '',
   })
   const [deleting, setDeleting] = useState(null)
+  
 const fetchProducts = async () => {
   setLoading(true)
 
@@ -29,10 +31,10 @@ const fetchProducts = async () => {
       params: { page, size: 10 }
     })
 
-    console.log('PRODUCTS RESPONSE:', res.data)
+    // console.log('PRODUCTS RESPONSE:', res.data) // debugging
 
     setProducts(res.data.data.data || [])
-    setTotalPages(res.data.paging?.totalPage || 1)
+    setTotalPages(res.data.data.paging?.totalPage || 1)
 
   } catch (err) {
     console.error(err)
@@ -70,11 +72,17 @@ const fetchProducts = async () => {
       }
       setShowForm(false)
       setEditProduct(null)
-      setForm({ name: '', description: '', price: '', stock: '', categoryId: '', image: '' })
+      setForm({ name: '', description: '', price: '', stock: '', categoryId: '', image: '',slug: '' })
       fetchProducts()
-    } catch (err) {
-      alert(err.response?.data?.message || 'Failed to save product')
-    }
+      } catch (err) {
+        const errData = err.response?.data
+        // Zod validation error biasanya ada di errors array
+        if (errData?.errors) {
+          alert(JSON.stringify(errData.errors, null, 2))
+        } else {
+          alert(errData?.message || 'Failed to save product')
+        }
+      }
   }
 
   const handleEdit = (product) => {
@@ -86,6 +94,7 @@ const fetchProducts = async () => {
       stock: product.stock,
       categoryId: product.categoryId,
       image: product.image || '',
+      slug: product.slug,
     })
     setShowForm(true)
   }
@@ -114,7 +123,7 @@ const fetchProducts = async () => {
         </div>
         <Button variant="primary" onClick={() => {
           setEditProduct(null)
-          setForm({ name: '', description: '', price: '', stock: '', categoryId: '', image: '' })
+          setForm({ name: '', description: '', price: '', stock: '', categoryId: '', image: '', slug: '' })
           setShowForm(true)
         }}>
           <Plus size={16} className="inline mr-2" />
@@ -177,6 +186,15 @@ const fetchProducts = async () => {
                 value={form.image}
                 onChange={e => setForm({ ...form, image: e.target.value })}
                 placeholder="https://..."
+                className="font-body text-sm px-4 py-3 rounded-md border border-hairline-light outline-none focus:border-canvas-night"
+              />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="font-body text-sm font-medium text-shade-60">Slug</label>
+              <input
+                value={form.slug}
+                onChange={e => setForm({ ...form, slug: e.target.value })}
+                placeholder="product-slug"
                 className="font-body text-sm px-4 py-3 rounded-md border border-hairline-light outline-none focus:border-canvas-night"
               />
             </div>
