@@ -1,0 +1,39 @@
+## Phase 1.4 — Folder Structure
+
+```
+src/
+├── components/
+│   ├── ui/          ← Button, Input, Card, Navbar, Footer
+│   ├── catalog/     ← ProductCard, ProductGrid, FilterSidebar
+│   ├── cart/        ← CartDrawer, CartItem, CheckoutForm
+│   └── admin/       ← DataTable, ProductForm
+├── pages/
+│   ├── admin/       ← Admin pages
+├── store/           ← Zustand stores
+├── data/            ← Mock JSON data
+├── hooks/           ← Custom hooks
+├── router/          ← Route definitions
+├── App.jsx
+├── main.jsx
+└── index.css
+```
+
+---
+
+**Why this structure?**
+
+| Folder | Reason |
+|---|---|
+| `components/ui` | Reusable building blocks used everywhere |
+| `components/catalog` | Components only used in catalog/shop |
+| `components/cart` | Components only used in cart/checkout |
+| `components/admin` | Components only used in admin panel |
+| `pages/` | One file per page/route |
+| `store/` | All global state in one place |
+| `data/` | Mock data so we don't need a backend yet |
+| `hooks/` | Reusable logic shared between components |
+| `router/` | All routes defined in one place |
+
+---
+
+The idea is simple — **group by feature, not by file type.** Everything related to the catalog lives in `components/catalog`, everything related to the cart lives in `components/cart`. When you need to find something, you know exactly where to look.

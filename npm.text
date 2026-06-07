@@ -1,0 +1,30 @@
+Here's the corrected install commands:
+
+---
+
+### Install Commands
+
+```bash
+npm install react-router-dom zustand lucide-react sonner
+npm install -D tailwindcss@3 postcss autoprefixer
+npx tailwindcss init -p
+```
+
+---
+
+### What Each Does
+
+| Package | What it does | Type |
+|---|---|---|
+| `react-router-dom` | Gives us pages and navigation between them | dependency |
+| `zustand` | Global state management (cart, auth) | dependency |
+| `lucide-react` | Icons | dependency |
+| `sonner` | Toast notifications | dependency |
+| `tailwindcss@3` | Utility-first CSS framework for styling | devDependency |
+| `postcss` | Processes CSS, required by Tailwind | devDependency |
+| `autoprefixer` | Adds browser prefixes to CSS automatically | devDependency |
+| `npx tailwindcss init -p` | Creates `tailwind.config.js` and `postcss.config.js` in your project | config setup |
+
+---
+
+Tell me when all three commands finish successfully and we'll move to **Phase 1.3 — configuring Tailwind with our DESIGN.md tokens.**
