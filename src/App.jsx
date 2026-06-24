@@ -14,6 +14,8 @@ import OrderDetail from './pages/OrderDetail'
 import Orders from './pages/Orders'
 import AdminProducts from './pages/admin/Products'
 import AdminOrders from './pages/admin/Orders'
+import AdminUsers from './pages/admin/Users'
+import GuestRoute from './router/GuestRoute'
 
 function App() {
   return (
@@ -25,8 +27,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/catalog" element={<Catalog />} />
           <Route path="/product/:slug" element={<ProductDetail />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<GuestRoute><Login /></GuestRoute>} />
+          <Route path="/register" element={<GuestRoute><Register /></GuestRoute>} />
 
           <Route path="/cart" element={
             <ProtectedRoute><Cart /></ProtectedRoute>
@@ -52,6 +54,7 @@ function App() {
           <Route index element={<AdminProducts />} /> 
           <Route path="products" element={<AdminProducts />} />
           <Route path="orders" element={<AdminOrders />} />
+          <Route path="users" element={<AdminUsers />} />
         </Route>
 
       </Routes>

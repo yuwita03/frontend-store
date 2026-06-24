@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom'
-import { Package, ShoppingBag, LogOut, Users } from 'lucide-react'
+import { Package, ShoppingBag, LogOut, Users } from 'lucide-react' // Menggunakan Users (jamak)
 import useAuthStore from '../../store/authStore'
 
 function AdminLayout() {
@@ -15,6 +15,7 @@ function AdminLayout() {
   const links = [
     { label: 'Products', path: '/admin/products', icon: Package },
     { label: 'Orders',   path: '/admin/orders',   icon: ShoppingBag },
+    { label: 'Users',    path: '/admin/users',    icon: Users }, // PERBAIKAN: Path diubah ke /admin/users & icon menggunakan Users
   ]
 
   return (

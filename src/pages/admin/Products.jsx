@@ -1,120 +1,30 @@
 import { useState, useEffect } from 'react'
 import { Plus, Pencil, Trash2 } from 'lucide-react'
-import api from '../../api/api'
 import Button from '../../components/ui/Button'
 import Badge from '../../components/ui/Badge'
-
+import { useAdminProducts } from '../../hooks/useAdminProduct'
+import Toast from '../../components/UI/Toats'
+import { useConfirm } from '../../hooks/useConfirmModal'
+import ConfirmModal from '../../components/UI/ConfirmModal'
 function AdminProducts() {
-  const [products, setProducts] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [page, setPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
-  const [showForm, setShowForm] = useState(false)
-  const [editProduct, setEditProduct] = useState(null)
-  const [categories, setCategories] = useState([])
-  const [form, setForm] = useState({
-    name: '',
-    description: '',
-    price: '',
-    stock: '',
-    categoryId: '',
-    image: '',
-    slug: '',
-  })
-  const [deleting, setDeleting] = useState(null)
-  
-const fetchProducts = async () => {
-  setLoading(true)
+const {
+  products, loading, page,  setPage, totalPages, categories,
+  showForm, setShowForm, editProduct, setEditProduct,
+  form, setForm, deleting,
+  handleSubmit, handleEdit, handleDelete, toast, 
+} = useAdminProducts()
 
-  try {
-    const res = await api.get('/products', {
-      params: { page, size: 10 }
-    })
-
-    // console.log('PRODUCTS RESPONSE:', res.data) // debugging
-
-    setProducts(res.data.data.data || [])
-    setTotalPages(res.data.data.paging?.totalPage || 1)
-
-  } catch (err) {
-    console.error(err)
-  } finally {
-    setLoading(false)
-  }
-}
-
-  const fetchCategories = async () => {
-    try {
-      const res = await api.get('/categories')
-      setCategories(res.data.data || [])
-    } catch (err) {
-      console.error(err)
-    }
-  }
-
-  useEffect(() => {
-    fetchProducts()
-    fetchCategories()
-  }, [page])
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    try {
-      const payload = {
-        ...form,
-        price: Number(form.price),
-        stock: Number(form.stock),
-      }
-      if (editProduct) {
-        await api.patch(`/products/${editProduct.id}`, payload)
-      } else {
-        await api.post('/products', payload)
-      }
-      setShowForm(false)
-      setEditProduct(null)
-      setForm({ name: '', description: '', price: '', stock: '', categoryId: '', image: '',slug: '' })
-      fetchProducts()
-      } catch (err) {
-        const errData = err.response?.data
-        // Zod validation error biasanya ada di errors array
-        if (errData?.errors) {
-          alert(JSON.stringify(errData.errors, null, 2))
-        } else {
-          alert(errData?.message || 'Failed to save product')
-        }
-      }
-  }
-
-  const handleEdit = (product) => {
-    setEditProduct(product)
-    setForm({
-      name: product.name,
-      description: product.description || '',
-      price: product.price,
-      stock: product.stock,
-      categoryId: product.categoryId,
-      image: product.image || '',
-      slug: product.slug,
-    })
-    setShowForm(true)
-  }
-
-  const handleDelete = async (id) => {
-    if (!confirm('Delete this product?')) return
-    setDeleting(id)
-    try {
-      await api.delete(`/products/${id}`)
-      fetchProducts()
-    } catch (err) {
-      alert(err.response?.data?.message || 'Failed to delete product')
-    } finally {
-      setDeleting(null)
-    }
-  }
-
+const { confirmState, confirm, handleConfirm, handleCancel } = useConfirm()
   return (
     <div className="p-8">
-
+      <Toast toast={toast} />
+      <ConfirmModal
+          isOpen={!!confirmState}
+          title={confirmState?.title}
+          message={confirmState?.message}
+          onConfirm={handleConfirm}
+          onCancel={handleCancel}
+        />
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
@@ -132,97 +42,161 @@ const fetchProducts = async () => {
       </div>
 
       {/* Form */}
-      {showForm && (
-        <div className="bg-canvas-light border border-hairline-light rounded-lg p-6 mb-8">
-          <h2 className="font-display text-xl text-canvas-night mb-4">
-            {editProduct ? 'Edit Product' : 'Add New Product'}
-          </h2>
-          <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-1">
-              <label className="font-body text-sm font-medium text-shade-60">Name</label>
-              <input
-                value={form.name}
-                onChange={e => setForm({ ...form, name: e.target.value })}
-                placeholder="Product name"
-                className="font-body text-sm px-4 py-3 rounded-md border border-hairline-light outline-none focus:border-canvas-night"
-              />
-            </div>
-            <div className="flex flex-col gap-1">
-              <label className="font-body text-sm font-medium text-shade-60">Category</label>
-              <select
-                value={form.categoryId}
-                onChange={e => setForm({ ...form, categoryId: e.target.value })}
-                className="font-body text-sm px-4 py-3 rounded-md border border-hairline-light outline-none focus:border-canvas-night bg-canvas-light"
-              >
-                <option value="">Select category</option>
-                {categories.map(cat => (
-                  <option key={cat.id} value={cat.id}>{cat.name}</option>
-                ))}
-              </select>
-            </div>
-            <div className="flex flex-col gap-1">
-              <label className="font-body text-sm font-medium text-shade-60">Price (IDR)</label>
-              <input
-                type="number"
-                value={form.price}
-                onChange={e => setForm({ ...form, price: e.target.value })}
-                placeholder="75000"
-                className="font-body text-sm px-4 py-3 rounded-md border border-hairline-light outline-none focus:border-canvas-night"
-              />
-            </div>
-            <div className="flex flex-col gap-1">
-              <label className="font-body text-sm font-medium text-shade-60">Stock</label>
-              <input
-                type="number"
-                value={form.stock}
-                onChange={e => setForm({ ...form, stock: e.target.value })}
-                placeholder="100"
-                className="font-body text-sm px-4 py-3 rounded-md border border-hairline-light outline-none focus:border-canvas-night"
-              />
-            </div>
-            <div className="flex flex-col gap-1 col-span-2">
-              <label className="font-body text-sm font-medium text-shade-60">Image URL</label>
-              <input
-                value={form.image}
-                onChange={e => setForm({ ...form, image: e.target.value })}
-                placeholder="https://..."
-                className="font-body text-sm px-4 py-3 rounded-md border border-hairline-light outline-none focus:border-canvas-night"
-              />
-            </div>
-            <div className="flex flex-col gap-1">
-              <label className="font-body text-sm font-medium text-shade-60">Slug</label>
-              <input
-                value={form.slug}
-                onChange={e => setForm({ ...form, slug: e.target.value })}
-                placeholder="product-slug"
-                className="font-body text-sm px-4 py-3 rounded-md border border-hairline-light outline-none focus:border-canvas-night"
-              />
-            </div>
-            <div className="flex flex-col gap-1 col-span-2">
-              <label className="font-body text-sm font-medium text-shade-60">Description</label>
-              <textarea
-                value={form.description}
-                onChange={e => setForm({ ...form, description: e.target.value })}
-                placeholder="Product description..."
-                rows={3}
-                className="font-body text-sm px-4 py-3 rounded-md border border-hairline-light outline-none focus:border-canvas-night resize-none"
-              />
-            </div>
-            <div className="col-span-2 flex gap-3">
-              <Button type="submit" variant="primary">
-                {editProduct ? 'Save Changes' : 'Add Product'}
-              </Button>
-              <Button
-                type="button"
-                variant="outline_light"
-                onClick={() => { setShowForm(false); setEditProduct(null) }}
-              >
-                Cancel
-              </Button>
-            </div>
-          </form>
-        </div>
-      )}
+     {showForm && (
+  <div className="bg-canvas-light border border-hairline-light rounded-lg p-6 mb-8">
+    <h2 className="font-display text-xl text-canvas-night mb-4">
+      {editProduct ? 'Edit Product' : 'Add New Product'}
+    </h2>
+    <form className="grid grid-cols-2 gap-4">
+      
+      {/* 1. Name */}
+      <div className="flex flex-col gap-1">
+        <label className="font-body text-sm font-medium text-shade-60">Name</label>
+        <input
+          required
+          value={form.name}
+          onChange={e => {
+            const name = e.target.value;
+            // UX: Otomatis mengisi slug saat mengetik nama produk
+            const generatedSlug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+            setForm({ ...form, name, slug: generatedSlug });
+          }}
+          placeholder="Product name"
+          className="font-body text-sm px-4 py-3 rounded-md border border-hairline-light outline-none focus:border-canvas-night"
+        />
+      </div>
+
+      {/* 2. Category */}
+      <div className="flex flex-col gap-1">
+        <label className="font-body text-sm font-medium text-shade-60">Category</label>
+        <select
+          required
+          value={form.categoryId}
+          onChange={e => setForm({ ...form, categoryId: e.target.value })}
+          className="font-body text-sm px-4 py-3 rounded-md border border-hairline-light outline-none focus:border-canvas-night bg-canvas-light"
+        >
+          <option value="">Select category</option>
+          {categories.map(cat => (
+            <option key={cat.id} value={cat.id}>{cat.name}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* 3. Price */}
+      <div className="flex flex-col gap-1">
+        <label className="font-body text-sm font-medium text-shade-60">Price (IDR)</label>
+        <input
+          required
+          type="number"
+          min="0"
+          value={form.price}
+          // UX: Pastikan input kosong tidak menghasilkan nilai NaN
+          onChange={e => setForm({ ...form, price: e.target.value === '' ? '' : Number(e.target.value) })}
+          placeholder="75000"
+          className="font-body text-sm px-4 py-3 rounded-md border border-hairline-light outline-none focus:border-canvas-night"
+        />
+      </div>
+
+      {/* 4. Stock */}
+      <div className="flex flex-col gap-1">
+        <label className="font-body text-sm font-medium text-shade-60">Stock</label>
+        <input
+          required
+          type="number"
+          min="0"
+          value={form.stock}
+          onChange={e => setForm({ ...form, stock: e.target.value === '' ? '' : Number(e.target.value) })}
+          placeholder="100"
+          className="font-body text-sm px-4 py-3 rounded-md border border-hairline-light outline-none focus:border-canvas-night"
+        />
+      </div>
+
+      {/* 5. Slug */}
+      <div className="flex flex-col gap-1">
+        <label className="font-body text-sm font-medium text-shade-60">Slug</label>
+        <input
+          required
+          value={form.slug}
+          onChange={e => setForm({ ...form, slug: e.target.value.toLowerCase().replace(/\s+/g, '-') })}
+          placeholder="product-slug"
+          className="font-body text-sm px-4 py-3 rounded-md border border-hairline-light outline-none focus:border-canvas-night"
+        />
+      </div>
+
+{/* 6. Active Status - Toggle Switch Button */}
+<div className="flex flex-col gap-1">
+  <label className="font-body text-sm font-medium text-shade-60">Status</label>
+  <div 
+    onClick={() => setForm({ ...form, isActive: !form.isActive })}
+    className={`flex items-center justify-between h-[46px] px-4 rounded-md border cursor-pointer select-none transition-all duration-200 ${
+      form.isActive 
+        ? 'border-canvas-night bg-canvas-night/5' 
+        : 'border-hairline-light bg-transparent'
+    }`}
+  >
+    <span className="font-body text-sm font-medium text-shade-60">
+      {form.isActive ? 'Active' : 'Inactive'}
+    </span>
+    
+    {/* Visual Switch */}
+    <div className={`w-10 h-6 flex items-center rounded-full p-1 duration-300 ease-in-out ${
+      form.isActive ? 'bg-canvas-night' : 'bg-shade-60/30'
+    }`}>
+      <div className={`bg-canvas-light w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out ${
+        form.isActive ? 'translate-x-4' : 'translate-x-0'
+      }`} />
+    </div>
+  </div>
+</div>
+
+
+
+      {/* 7. Image URL */}
+      <div className="flex flex-col gap-1 col-span-2">
+        <label className="font-body text-sm font-medium text-shade-60">Image URL</label>
+        <input
+          type="url"
+          value= ""
+          onChange={e => setForm({ ...form, image: e.target.value })}
+          placeholder="https://..."
+          className="font-body text-sm px-4 py-3 rounded-md border border-hairline-light outline-none focus:border-canvas-night"
+        />
+      </div>
+
+      {/* 8. Description */}
+      <div className="flex flex-col gap-1 col-span-2">
+        <label className="font-body text-sm font-medium text-shade-60">Description</label>
+        <textarea
+          value={form.description}
+          onChange={e => setForm({ ...form, description: e.target.value })}
+          placeholder="Product description..."
+          rows={3}
+          className="font-body text-sm px-4 py-3 rounded-md border border-hairline-light outline-none focus:border-canvas-night resize-none"
+        />
+      </div>
+
+      {/* Action Buttons */}
+      <div className="col-span-2 flex gap-3 mt-2">
+        <Button type="button" variant="primary"
+                        onClick={() => confirm({
+                          title: editProduct? 'Save Changes': 'Add Product',
+                          message: editProduct ? 'Are you sure you wanna update this product?' : 'Are you sure you wanna add this product?',
+                          onConfirm: () => handleSubmit({preventDefault: () => {}})
+                        })}>
+          {editProduct ? 'Save Changes' : 'Add Product'}
+        </Button>
+        <Button
+          type="button"
+          variant="outline_light"
+          onClick={() => { setShowForm(false); setEditProduct(null) }}
+        >
+          Cancel
+        </Button>
+      </div>
+    </form>
+  </div>
+)}
+
 
       {/* Table */}
       {loading ? (
@@ -279,16 +253,21 @@ const fetchProducts = async () => {
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center justify-end gap-2">
+                      {/* Edit Button */}
                       <button
                         onClick={() => handleEdit(product)}
                         className="p-2 rounded-md hover:bg-canvas-cream transition-colors text-shade-50 hover:text-canvas-night"
                       >
                         <Pencil size={14} />
                       </button>
+                      {/* Delete Button */}
                       <button
-                        onClick={() => handleDelete(product.id)}
-                        disabled={deleting === product.id}
-                        className="p-2 rounded-md hover:bg-red-50 transition-colors text-shade-50 hover:text-red-500 disabled:opacity-30"
+                        onClick={() => confirm({
+                          title: 'Hapus Produk',
+                          message: 'Yakin mau hapus produk ini?',
+                          onConfirm: () => handleDelete(product.id)
+                        })}
+                        className="p-2 rounded-md hover:bg-red-50 transition-colors text-shade-50 hover:text-red-500"
                       >
                         <Trash2 size={14} />
                       </button>

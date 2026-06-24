@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import api from '../../api/api'
 import Badge from '../../components/ui/Badge'
+import { data } from 'react-router-dom'
 
 function AdminOrders() {
   const [orders, setOrders] = useState([])
@@ -15,6 +16,7 @@ function AdminOrders() {
       const res = await api.get('/orders/admin', {
         params: { page, size: 10 }
       })
+      // console.log('Response API:', res.data)
       setOrders(res.data.data || [])
       setTotalPages(res.data.paging?.totalPage || 1)
     } catch (err) {

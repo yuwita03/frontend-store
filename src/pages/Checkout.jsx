@@ -22,6 +22,7 @@ function Checkout() {
     city: '',
     province: '',
     postalCode: '',
+    isDefault: false,
     })
   useEffect(() => {
     const fetchData = async () => {
