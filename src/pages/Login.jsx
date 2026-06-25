@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import api from '../api/api'
 import useAuthStore from '../store/authStore'
-import Button from '../components/ui/Button'
+import Button from '../components/UI/Button'
 import Input from '../components/UI/Input'
 
 function Login() {
