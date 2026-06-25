@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Package, ChevronRight } from 'lucide-react'
 import api from '../api/api'
-import Badge from '../components/UI/Badge'
-import Button from '../components/UI/Button'
+import Badge from '../components/ui/Badge'
+import Button from '../components/ui/Button'
 
 function Orders() {
   const [orders, setOrders] = useState([])

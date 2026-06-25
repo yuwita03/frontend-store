@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { MapPin, Plus } from 'lucide-react'
 import api from '../api/api'
-import Button from '../components/UI/Button'
-import Input from '../components/UI/Input'
+import Button from '../components/ui/Button'
+import Input from '../components/ui/Input'
 
 function Checkout() {
   const navigate = useNavigate()

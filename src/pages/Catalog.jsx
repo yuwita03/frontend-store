@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import api from '../api/api'
 import ProductCard from '../components/catalog/ProductCard'
-import Input from '../components/UI/Input'
+import Input from '../components/ui/Input'
 import { Filter, X } from 'lucide-react'
 
 function Catalog() {

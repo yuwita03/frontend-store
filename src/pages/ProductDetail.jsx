@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ShoppingCart, ShieldCheck, Truck, RotateCcw, AlertTriangle, ArrowLeft } from 'lucide-react';
 import api from '../api/api';
-import Toast from '../components/UI/Toats';
+import Toast from '../components/ui/Toats';
 import { useToast } from '../hooks/useToast';
 
 export default function ProductDetail() {
