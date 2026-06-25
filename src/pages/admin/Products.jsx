@@ -3,9 +3,9 @@ import { Plus, Pencil, Trash2 } from 'lucide-react'
 import Button from '../../components/ui/Button'
 import Badge from '../../components/ui/Badge'
 import { useAdminProducts } from '../../hooks/useAdminProduct'
-import Toast from '../../components/UI/Toats'
+import Toast from '../../components/ui/Toats'
 import { useConfirm } from '../../hooks/useConfirmModal'
-import ConfirmModal from '../../components/UI/ConfirmModal'
+import ConfirmModal from '../../components/ui/ConfirmModal'
 function AdminProducts() {
 const {
   products, loading, page,  setPage, totalPages, categories,
