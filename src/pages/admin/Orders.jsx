@@ -16,7 +16,6 @@ function AdminOrders() {
       const res = await api.get('/orders/admin', {
         params: { page, size: 10 }
       })
-      // console.log('Response API:', res.data)
       setOrders(res.data.data || [])
       setTotalPages(res.data.paging?.totalPage || 1)
     } catch (err) {

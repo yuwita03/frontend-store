@@ -13,7 +13,6 @@ function Cart() {
   const fetchCart = async () => {
     try {
       const res = await api.get('/cart')
-      console.log('CART RESPONSE:', res.data)
       setCart(res.data.data?.items || [])
     } catch (err) {
       console.error(err)

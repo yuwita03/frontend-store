@@ -24,11 +24,9 @@ function Login() {
 
     try {
       const res = await api.post('/users/login', form)
-      console.log('res.data:', res.data)
       login(res.data.data)
       navigate('/')
     } catch (err) {
-      console.log('Full error:', err.response?.data) //
       setError(err.response?.data?.message || 'Login failed')
     } finally {
       setLoading(false)
@@ -96,7 +94,27 @@ function Login() {
             Register
           </Link>
         </p>
-
+      {/* Demo Login Button */}
+      <div className=' flex gap-5'>
+      <button
+        type="button"
+        onClick={() => {
+          setForm({ username: 'pelanggan', password: 'pelanggan123' })
+        }}
+        className="w-full border border-dashed border-stone-300 text-stone-500 hover:border-stone-400 hover:text-stone-700 text-xs font-mono uppercase tracking-wider py-3 rounded-lg transition-colors"
+        >
+        Try Demo as Pelanggan
+      </button>
+      <button
+        type="button"
+        onClick={() => {
+          setForm({ username: 'admin', password: 'admin123' })
+        }}
+        className="w-full border border-dashed border-stone-300 text-stone-500 hover:border-stone-400 hover:text-stone-700 text-xs font-mono uppercase tracking-wider py-3 rounded-lg transition-colors"
+        >
+        Try Demo as Admin
+      </button>
+      </div>
       </div>
     </div>
   )

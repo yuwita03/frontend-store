@@ -79,8 +79,7 @@ export default function ProductDetail() {
       });
       showToast('Added to cart!')
     } catch (err) {
-      console.log('Full error:', err.response?.data)
-      // showToast(err.response?.data?.message || JSON.stringify(err.response?.data) || 'Failed to add to cart')
+      showToast(err.response?.data?.message || JSON.stringify(err.response?.data) || 'Failed to add to cart')
     } finally {
       setIsAdding(false);
     }

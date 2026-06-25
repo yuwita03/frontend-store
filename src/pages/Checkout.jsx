@@ -210,6 +210,7 @@ const handleCheckout = async () => {
                         onChange={(e) => setNewAddress({ ...newAddress, name: e.target.value })}
                         />
                         <Input
+                        type='number'
                         label="Phone Number"
                         placeholder="081234567890"
                         value={newAddress.phone}
@@ -236,6 +237,7 @@ const handleCheckout = async () => {
                         />
                         </div>
                         <Input
+                        type='number'
                         label="Postal Code"
                         placeholder="10110"
                         value={newAddress.postalCode}
@@ -248,6 +250,7 @@ const handleCheckout = async () => {
                             checked={newAddress.isDefault}
                             onChange={(e) => setNewAddress({ ...newAddress, isDefault: e.target.checked })}
                         />
+                        <span>Set as default address</span>
                         </div>
                         <div className="flex gap-2">
                         <Button type="submit" variant="primary" className="flex-1">

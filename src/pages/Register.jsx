@@ -29,7 +29,6 @@ function Register() {
       await api.post('/users', form)
       navigate('/login')
     } catch (err) {
-      console.log(JSON.stringify(err.response?.data))
       setError(
   err.response?.data?.message ||
   err.response?.data?.errors ||
