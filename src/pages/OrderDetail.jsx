@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, MapPin, Package } from 'lucide-react'
 import api from '../api/api'
-import Badge from '../components/ui/Badge'
-import Button from '../components/ui/Button'
+import Badge from '../components/UI/Badge'
+import Button from '../components/UI/Button'
 
 function OrderDetail() {
   const { id } = useParams()

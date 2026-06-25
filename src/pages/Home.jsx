@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import Button from '../components/ui/Button'
+import Button from '../components/UI/Button'
 
 function Home() {
   const categories = [

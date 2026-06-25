@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import Badge from '../ui/Badge'
+import Badge from '../UI/Badge'
 
 function ProductCard({ product }) {
   return (
