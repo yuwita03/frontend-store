@@ -13,15 +13,14 @@ const api = axios.create({
 
 // Automatically attach token to every request
 api.interceptors.request.use((config) => {
-  const authData = localStorage.getItem('auth-store')
-  if (authData) {
-    const parsed = JSON.parse(authData)
-    const token = parsed?.state?.token
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`
-    }
+  const token = localStorage.getItem('token')
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
   }
   return config
+}, (error) => {
+  console.log("API ERROR:", error.response?.data || error.message) // ✅ ganti err → error
+  return Promise.reject(error) // ✅
 })
 
 export default api
