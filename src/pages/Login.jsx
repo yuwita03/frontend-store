@@ -34,87 +34,84 @@ function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-stone-50 flex items-center justify-center px-4 antialiased text-stone-800">
-      <div className="w-full max-w-md bg-white border border-stone-200 p-8 rounded-2xl shadow-xs">
+    <div className="min-h-screen bg-[#faf9f5] flex items-center justify-center px-4 font-['Hanken_Grotesk'] text-[#1b1c1a]">
+      <div className="w-full max-w-md bg-[#ffffff] p-8 rounded-[0.5rem] shadow-[0_4px_15px_rgba(51,69,55,0.06)]">
 
-        {/* Header */}
         <div className="mb-8">
-          <h1 className="font-serif text-3xl font-bold text-stone-900 tracking-tight">
+          <h1 className="font-['Libre_Caslon_Text'] text-3xl font-semibold text-[#1b1c1a]">
             Welcome back
           </h1>
-          <p className="font-mono text-xs text-stone-400 uppercase tracking-wider mt-2">
+          <p className="font-['Hanken_Grotesk'] text-xs font-semibold tracking-[0.05em] text-[#737872] uppercase mt-2">
             Sign in to your account to continue
           </p>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
 
-          <Input
-            label="Username"
-            name="username"
-            type="text"
-            placeholder="yourname"
-            value={form.username}
-            onChange={handleChange}
-            className="font-mono text-sm"
-          />
+          <div>
+            <label className="font-['Hanken_Grotesk'] text-sm font-medium text-[#434843] block mb-1.5">Username</label>
+            <input
+              name="username"
+              type="text"
+              placeholder="yourname"
+              value={form.username}
+              onChange={handleChange}
+              className="w-full font-['Hanken_Grotesk'] text-sm px-4 py-3 rounded-[0.25rem] bg-[#faf9f5] text-[#1b1c1a] placeholder:text-[#c3c8c1] outline-none border border-[#c3c8c1] focus:border-[#334537] transition-colors"
+            />
+          </div>
 
-          <Input
-            label="Password"
-            name="password"
-            type="password"
-            placeholder="••••••••"
-            value={form.password}
-            onChange={handleChange}
-            className="font-mono text-sm"
-          />
+          <div>
+            <label className="font-['Hanken_Grotesk'] text-sm font-medium text-[#434843] block mb-1.5">Password</label>
+            <input
+              name="password"
+              type="password"
+              placeholder="••••••••"
+              value={form.password}
+              onChange={handleChange}
+              className="w-full font-['Hanken_Grotesk'] text-sm px-4 py-3 rounded-[0.25rem] bg-[#faf9f5] text-[#1b1c1a] placeholder:text-[#c3c8c1] outline-none border border-[#c3c8c1] focus:border-[#334537] transition-colors"
+            />
+          </div>
 
           {error && (
-            <p className="font-mono text-xs text-rose-600 font-bold uppercase tracking-wide bg-rose-50 p-3 rounded-lg border border-rose-100">
+            <p className="font-['Hanken_Grotesk'] text-xs font-semibold tracking-[0.05em] text-[#ba1a1a] uppercase bg-[#ffdad6] p-3 rounded-[0.25rem]">
               {error}
             </p>
           )}
 
-          <Button
+          <button
             type="submit"
-            variant="primary"
             disabled={loading}
-            className="w-full mt-2 bg-stone-950 text-white hover:bg-stone-800 text-xs font-mono font-bold py-3 rounded-lg transition-colors shadow-xs disabled:opacity-40"
+            className="w-full bg-[#334537] hover:bg-[#4a5d4e] text-[#ffffff] font-['Hanken_Grotesk'] text-xs font-semibold tracking-[0.05em] py-3.5 rounded-[0.25rem] uppercase transition-colors disabled:opacity-40 shadow-[0_4px_15px_rgba(51,69,55,0.06)]"
           >
-            {loading ? 'SIGNING IN...' : 'SIGN IN'}
-          </Button>
+            {loading ? 'Signing In...' : 'Sign In'}
+          </button>
 
         </form>
 
-        {/* Footer */}
-        <p className="font-mono text-xs text-stone-400 mt-8 text-center uppercase tracking-wider">
+        <p className="font-['Hanken_Grotesk'] text-xs font-semibold tracking-[0.05em] text-[#737872] mt-8 text-center uppercase">
           Don't have an account?{' '}
-          <Link to="/register" className="text-stone-900 font-bold hover:underline ml-1">
+          <Link to="/register" className="text-[#334537] hover:text-[#4a5d4e] ml-1">
             Register
           </Link>
         </p>
-      {/* Demo Login Button */}
-      <div className=' flex gap-5'>
-      <button
-        type="button"
-        onClick={() => {
-          setForm({ username: 'pelanggan', password: 'pelanggan123' })
-        }}
-        className="w-full border border-dashed border-stone-300 text-stone-500 hover:border-stone-400 hover:text-stone-700 text-xs font-mono uppercase tracking-wider py-3 rounded-lg transition-colors"
+
+      <div className="flex gap-3 mt-6">
+        <button
+          type="button"
+          onClick={() => setForm({ username: 'pelanggan', password: 'pelanggan123' })}
+          className="w-full border border-dashed border-[#c3c8c1] text-[#737872] hover:border-[#334537] hover:text-[#334537] text-xs font-['Hanken_Grotesk'] font-semibold tracking-[0.05em] uppercase py-3 rounded-[0.25rem] transition-colors"
         >
-        Try Demo as Pelanggan
-      </button>
-      <button
-        type="button"
-        onClick={() => {
-          setForm({ username: 'admin', password: 'admin123' })
-        }}
-        className="w-full border border-dashed border-stone-300 text-stone-500 hover:border-stone-400 hover:text-stone-700 text-xs font-mono uppercase tracking-wider py-3 rounded-lg transition-colors"
+          Demo as Pelanggan
+        </button>
+        <button
+          type="button"
+          onClick={() => setForm({ username: 'admin', password: 'admin123' })}
+          className="w-full border border-dashed border-[#c3c8c1] text-[#737872] hover:border-[#334537] hover:text-[#334537] text-xs font-['Hanken_Grotesk'] font-semibold tracking-[0.05em] uppercase py-3 rounded-[0.25rem] transition-colors"
         >
-        Try Demo as Admin
-      </button>
+          Demo as Admin
+        </button>
       </div>
+
       </div>
     </div>
   )

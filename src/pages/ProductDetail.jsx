@@ -39,7 +39,7 @@ export default function ProductDetail() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center font-mono text-xs uppercase tracking-widest text-stone-400 animate-pulse">
+      <div className="min-h-screen bg-[#faf9f5] flex items-center justify-center font-['Hanken_Grotesk'] text-xs font-semibold tracking-[0.05em] text-[#737872] uppercase animate-pulse">
         Loading product information...
       </div>
     );
@@ -47,16 +47,16 @@ export default function ProductDetail() {
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-white flex flex-col items-center justify-center gap-3 px-4">
-        <p className="font-serif font-bold text-xl text-stone-800">Product could not be found</p>
-        <Link to="/catalog" className="text-xs font-mono uppercase tracking-wider text-sky-600 hover:underline">
+      <div className="min-h-screen bg-[#faf9f5] flex flex-col items-center justify-center gap-3 px-4">
+        <p className="font-['Libre_Caslon_Text'] font-semibold text-xl text-[#1b1c1a]">Product could not be found</p>
+        <Link to="/catalog" className="text-xs font-['Hanken_Grotesk'] font-semibold tracking-[0.05em] text-[#334537] hover:text-[#4a5d4e] uppercase transition-colors">
           Return to Catalog
         </Link>
       </div>
     );
   }
 
-  const productImage = product.image || "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=800&q=80";
+  const productImage = product.image || "";
 
   const formattedPrice = new Intl.NumberFormat('id-ID', {
     style: 'currency',
@@ -86,93 +86,96 @@ export default function ProductDetail() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-stone-800 antialiased py-12">
+    <div className="min-h-screen bg-[#faf9f5] text-[#1b1c1a] font-['Hanken_Grotesk'] py-12">
       <Toast toast={toast} />
-      <div className="max-w-6xl mx-auto px-4 sm:px-8">
+      <div className="max-w-[1280px] mx-auto px-6">
 
-        {/* Breadcrumb - Bersih & Minimalis */}
         <div className="mb-8">
           <Link
             to="/catalog"
-            className="inline-flex items-center gap-2 text-xs font-mono font-bold tracking-wider text-stone-400 hover:text-stone-900 transition-colors"
+            className="inline-flex items-center gap-2 text-xs font-['Hanken_Grotesk'] font-semibold tracking-[0.05em] text-[#737872] hover:text-[#334537] uppercase transition-colors"
           >
             <ArrowLeft size={14} />
-            BACK TO CATALOG
+            Back to Catalog
           </Link>
         </div>
 
-        {/* Main Layout */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-start">
 
-          {/* Left: Product Image & SKU */}
           <div className="md:col-span-6 lg:col-span-7">
-            <div className="bg-stone-50 rounded-2xl overflow-hidden border border-stone-100 aspect-square flex items-center justify-center">
-              <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+            <div className="bg-[#efeeea] rounded-[0.5rem] overflow-hidden aspect-square shadow-[0_4px_15px_rgba(51,69,55,0.06)]">
+              {product.image ? (
+                <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-[#efeeea]">
+                  <span className="font-['Hanken_Grotesk'] text-sm font-medium tracking-widest uppercase text-[#434843]">
+                    Product Image
+                  </span>
+                </div>
+              )}
             </div>
-            <div className="mt-3 text-left pl-1">
-              <span className="text-[10px] font-mono text-stone-400 uppercase tracking-widest">
-                SKU-SLUG: {product.slug}
+            <div className="mt-3 text-left">
+              <span className="text-[10px] font-['Hanken_Grotesk'] font-medium tracking-[0.05em] text-[#737872] uppercase">
+                SKU: {product.slug}
               </span>
             </div>
           </div>
 
-          {/* Right: Transaction Panel */}
           <div className="md:col-span-6 lg:col-span-5 flex flex-col gap-6">
             <div>
               {product.category?.name && (
-                <span className="inline-block bg-stone-100 text-stone-800 text-[10px] uppercase tracking-widest font-bold px-2.5 py-1 rounded-md mb-3">
+                <span className="inline-block bg-[#efeeea] text-[#434843] text-[10px] uppercase tracking-[0.05em] font-semibold px-3 py-1 rounded-[0.25rem] mb-3">
                   {product.category.name}
                 </span>
               )}
 
-              <h1 className="font-serif text-3xl font-bold text-stone-900 leading-tight mb-2">
+              <h1 className="font-['Libre_Caslon_Text'] text-3xl font-semibold text-[#1b1c1a] leading-tight mb-2">
                 {product.name}
               </h1>
 
-              <div className="text-xl font-mono font-bold text-stone-900">{formattedPrice}</div>
+              <div className="text-xl font-['Hanken_Grotesk'] font-semibold text-[#fe932c]">{formattedPrice}</div>
 
-              <div className="border-t border-stone-100 my-5" />
+              <div className="border-t border-[#e3e2df] my-5" />
 
               <div className="mb-2">
-                <h3 className="text-xs uppercase tracking-wider text-stone-400 font-bold mb-1.5">Description</h3>
-                <p className="text-stone-600 text-sm leading-relaxed">
+                <h3 className="text-xs uppercase tracking-[0.05em] text-[#737872] font-semibold mb-1.5">Description</h3>
+                <p className="text-[#434843] text-sm leading-relaxed">
                   {product.description || "No description provided for this product."}
                 </p>
               </div>
             </div>
 
-            {/* Purchase Action Box - Sesuai dengan gaya panel filter / box putih polos */}
-            <div className="bg-white border border-stone-200 rounded-2xl p-5 shadow-xs">
+            <div className="bg-[#ffffff] rounded-[0.5rem] p-6 shadow-[0_4px_15px_rgba(51,69,55,0.06)]">
               <div className="flex items-center justify-between mb-5">
-                <span className="text-xs font-mono font-bold text-stone-400 uppercase tracking-wider">Status</span>
+                <span className="text-xs font-['Hanken_Grotesk'] font-semibold tracking-[0.05em] text-[#737872] uppercase">Status</span>
                 {product.stock > 0 ? (
-                  <span className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-emerald-600 bg-emerald-50/50 px-2.5 py-1 rounded-lg">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="inline-flex items-center gap-1.5 text-xs font-['Hanken_Grotesk'] font-semibold text-[#334537] bg-[#efeeea] px-3 py-1 rounded-[0.25rem]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#334537]" />
                     {product.stock} units left
                   </span>
                 ) : (
-                  <span className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-stone-400 bg-stone-50 px-2.5 py-1 rounded-lg">
+                  <span className="inline-flex items-center gap-1.5 text-xs font-['Hanken_Grotesk'] font-semibold text-[#737872] bg-[#efeeea] px-3 py-1 rounded-[0.25rem]">
                     <AlertTriangle size={12} /> Out of Stock
                   </span>
                 )}
               </div>
 
               {product.stock > 0 && (
-                <div className="flex items-center justify-between mb-5 border-t border-stone-100 pt-4">
-                  <span className="text-xs font-mono font-bold text-stone-400 uppercase tracking-wider">Quantity</span>
-                  <div className="flex items-center border border-stone-200 rounded-lg p-1 bg-stone-50">
+                <div className="flex items-center justify-between mb-5 border-t border-[#e3e2df] pt-4">
+                  <span className="text-xs font-['Hanken_Grotesk'] font-semibold tracking-[0.05em] text-[#737872] uppercase">Quantity</span>
+                  <div className="flex items-center border border-[#c3c8c1] rounded-[0.25rem] p-1">
                     <button
                       onClick={() => setQuantity(Math.max(1, quantity - 1))}
                       disabled={quantity <= 1}
-                      className="w-7 h-7 rounded-md flex items-center justify-center hover:bg-white text-stone-600 transition-colors disabled:opacity-30 font-mono text-sm"
+                      className="w-7 h-7 rounded-[0.25rem] flex items-center justify-center hover:bg-[#efeeea] text-[#434843] transition-colors disabled:opacity-30 font-['Hanken_Grotesk'] text-sm"
                     >
                       -
                     </button>
-                    <span className="w-9 text-center font-bold text-xs font-mono text-stone-800">{quantity}</span>
+                    <span className="w-9 text-center font-semibold text-xs font-['Hanken_Grotesk'] text-[#1b1c1a]">{quantity}</span>
                     <button
                       onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
                       disabled={quantity >= product.stock}
-                      className="w-7 h-7 rounded-md flex items-center justify-center hover:bg-white text-stone-600 transition-colors disabled:opacity-30 font-mono text-sm"
+                      className="w-7 h-7 rounded-[0.25rem] flex items-center justify-center hover:bg-[#efeeea] text-[#434843] transition-colors disabled:opacity-30 font-['Hanken_Grotesk'] text-sm"
                     >
                       +
                     </button>
@@ -180,33 +183,31 @@ export default function ProductDetail() {
                 </div>
               )}
 
-              {/* Tombol Utama Hitam Minimalis */}
               <button
                 onClick={handleAddToCart}
                 disabled={product.stock === 0 || isAdding}
-                className={`w-full font-mono text-xs font-bold py-3 px-6 rounded-lg transition-colors text-center flex items-center justify-center gap-2 ${
+                className={`w-full font-['Hanken_Grotesk'] text-xs font-semibold tracking-[0.05em] py-3.5 px-6 rounded-[0.25rem] uppercase transition-all text-center flex items-center justify-center gap-2 shadow-[0_4px_15px_rgba(51,69,55,0.06)] ${
                   product.stock === 0
-                    ? 'bg-stone-100 text-stone-400 cursor-not-allowed'
-                    : 'bg-stone-950 text-white hover:bg-stone-800 active:bg-stone-900'
+                    ? 'bg-[#efeeea] text-[#737872] cursor-not-allowed'
+                    : 'bg-[#fe932c] text-[#ffffff] hover:bg-[#904d00]'
                 }`}
               >
                 <ShoppingCart size={14} />
-                {isAdding ? 'ADDING TO CART...' : `ADD TO CART — ${totalPrice}`}
+                {isAdding ? 'Adding to Cart...' : `Add to Cart — ${totalPrice}`}
               </button>
 
-              {/* Minimalist Trust Badges */}
-              <div className="grid grid-cols-3 gap-2 mt-5 border-t border-stone-100 pt-4 text-center">
+              <div className="grid grid-cols-3 gap-2 mt-5 border-t border-[#e3e2df] pt-4 text-center">
                 <div className="flex flex-col items-center gap-1">
-                  <Truck size={14} className="text-stone-400" />
-                  <span className="text-[10px] font-mono text-stone-500 font-medium">Free Shipping</span>
+                  <Truck size={14} className="text-[#737872]" />
+                  <span className="text-[10px] font-['Hanken_Grotesk'] font-medium text-[#737872]">Free Shipping</span>
                 </div>
                 <div className="flex flex-col items-center gap-1">
-                  <ShieldCheck size={14} className="text-stone-400" />
-                  <span className="text-[10px] font-mono text-stone-500 font-medium">Original Asset</span>
+                  <ShieldCheck size={14} className="text-[#737872]" />
+                  <span className="text-[10px] font-['Hanken_Grotesk'] font-medium text-[#737872]">Original Asset</span>
                 </div>
                 <div className="flex flex-col items-center gap-1">
-                  <RotateCcw size={14} className="text-stone-400" />
-                  <span className="text-[10px] font-mono text-stone-500 font-medium">Easy Returns</span>
+                  <RotateCcw size={14} className="text-[#737872]" />
+                  <span className="text-[10px] font-['Hanken_Grotesk'] font-medium text-[#737872]">Easy Returns</span>
                 </div>
               </div>
 

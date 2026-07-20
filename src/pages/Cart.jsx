@@ -71,42 +71,40 @@ function Cart() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-canvas-cream flex items-center justify-center">
-        <p className="font-body text-shade-50">Loading cart...</p>
+      <div className="min-h-screen bg-[#faf9f5] flex items-center justify-center">
+        <p className="font-['Hanken_Grotesk'] text-sm text-[#737872] animate-pulse">Loading cart...</p>
       </div>
     )
   }
 
-  // Empty state
   if (cart.length === 0) {
     return (
-      <div className="min-h-screen bg-canvas-cream flex flex-col items-center justify-center gap-6">
-        <ShoppingBag size={48} className="text-shade-30" />
+      <div className="min-h-screen bg-[#faf9f5] flex flex-col items-center justify-center gap-6 font-['Hanken_Grotesk']">
+        <ShoppingBag size={48} className="text-[#c3c8c1]" />
         <div className="text-center">
-          <h2 className="font-display text-2xl text-canvas-night">Your cart is empty</h2>
-          <p className="font-body text-sm text-shade-50 mt-2">
+          <h2 className="font-['Libre_Caslon_Text'] text-2xl font-semibold text-[#1b1c1a]">Your cart is empty</h2>
+          <p className="text-sm text-[#737872] mt-2">
             Looks like you haven't added anything yet
           </p>
         </div>
         <Link to="/catalog">
-          <Button variant="primary">Browse Catalog</Button>
+          <Button variant="primary" className="!bg-[#334537] !text-[#ffffff] !rounded-[0.25rem] !font-semibold !tracking-[0.05em] !text-xs !uppercase !shadow-[0_4px_15px_rgba(51,69,55,0.06)] hover:!bg-[#4a5d4e]">Browse Catalog</Button>
         </Link>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-canvas-cream">
-      <div className="max-w-5xl mx-auto px-8 py-12">
+    <div className="min-h-screen bg-[#faf9f5] font-['Hanken_Grotesk']">
+      <div className="max-w-[1280px] mx-auto px-6 py-12">
 
-        {/* Header */}
         <div className="flex items-center justify-between mb-8">
-          <h1 className="font-display text-4xl font-medium text-canvas-night">
+          <h1 className="font-['Libre_Caslon_Text'] text-[32px] font-semibold leading-10 text-[#1b1c1a]">
             Your Cart
           </h1>
           <button
             onClick={clearCart}
-            className="font-body text-sm text-shade-50 hover:text-red-500 transition-colors"
+            className="text-sm text-[#737872] hover:text-[#ba1a1a] transition-colors"
           >
             Clear all
           </button>
@@ -114,15 +112,13 @@ function Cart() {
 
         <div className="flex flex-col lg:flex-row gap-8">
 
-          {/* Cart Items */}
           <div className="flex-1 flex flex-col gap-4">
             {cart.map(item => (
               <div
                 key={item.id}
-                className="bg-canvas-light border border-hairline-light rounded-lg p-4 flex gap-4"
+                className="bg-[#ffffff] rounded-[0.5rem] p-4 flex gap-4 shadow-[0_4px_15px_rgba(51,69,55,0.06)]"
               >
-                {/* Image */}
-                <div className="w-24 h-24 rounded-md overflow-hidden shrink-0 bg-shade-30 flex items-center justify-center">
+                <div className="w-24 h-24 rounded-[0.25rem] overflow-hidden shrink-0 bg-[#efeeea] flex items-center justify-center">
                   {item.product?.image ? (
                     <img
                       src={item.product.image}
@@ -130,20 +126,19 @@ function Cart() {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <ShoppingBag size={24} className="text-shade-50" />
+                    <ShoppingBag size={24} className="text-[#737872]" />
                   )}
                 </div>
 
-                {/* Info */}
                 <div className="flex-1 flex flex-col justify-between">
                   <div>
-                    <p className="font-body text-xs text-shade-50">
+                    <p className="text-xs font-medium text-[#737872]">
                       {item.product?.category?.name}
                     </p>
-                    <h3 className="font-body text-sm font-medium text-canvas-night mt-0.5">
+                    <h3 className="text-sm font-medium text-[#1b1c1a] mt-0.5">
                       {item.product?.name}
                     </h3>
-                    <p className="font-body text-sm text-shade-60 mt-1">
+                    <p className="text-sm text-[#fe932c] font-semibold mt-1">
                       {new Intl.NumberFormat('id-ID', {
                         style: 'currency',
                         currency: 'IDR',
@@ -152,23 +147,22 @@ function Cart() {
                     </p>
                   </div>
 
-                  {/* Quantity + Remove */}
                   <div className="flex items-center justify-between mt-3">
-                    <div className="flex items-center border border-hairline-light rounded-pill p-1 bg-canvas-cream">
+                    <div className="flex items-center border border-[#c3c8c1] rounded-[0.25rem] p-1">
                       <button
                         onClick={() => updateQuantity(item.id, item.quantity - 1)}
                         disabled={updating === item.id || item.quantity <= 1}
-                        className="w-7 h-7 rounded-pill flex items-center justify-center hover:bg-shade-30 transition-colors disabled:opacity-30"
+                        className="w-7 h-7 rounded-[0.25rem] flex items-center justify-center hover:bg-[#efeeea] transition-colors disabled:opacity-30 text-[#434843]"
                       >
                         <Minus size={12} />
                       </button>
-                      <span className="w-8 text-center font-body text-sm font-medium">
+                      <span className="w-8 text-center text-sm font-medium text-[#1b1c1a]">
                         {item.quantity}
                       </span>
                       <button
                         onClick={() => updateQuantity(item.id, item.quantity + 1)}
                         disabled={updating === item.id}
-                        className="w-7 h-7 rounded-pill flex items-center justify-center hover:bg-shade-30 transition-colors disabled:opacity-30"
+                        className="w-7 h-7 rounded-[0.25rem] flex items-center justify-center hover:bg-[#efeeea] transition-colors disabled:opacity-30 text-[#434843]"
                       >
                         <Plus size={12} />
                       </button>
@@ -177,7 +171,7 @@ function Cart() {
                     <button
                       onClick={() => removeItem(item.id)}
                       disabled={updating === item.id}
-                      className="text-shade-40 hover:text-red-500 transition-colors disabled:opacity-30"
+                      className="text-[#737872] hover:text-[#ba1a1a] transition-colors disabled:opacity-30"
                     >
                       <Trash2 size={16} />
                     </button>
@@ -188,18 +182,17 @@ function Cart() {
             ))}
           </div>
 
-          {/* Order Summary */}
           <div className="w-full lg:w-80 shrink-0">
-            <div className="bg-canvas-light border border-hairline-light rounded-lg p-6 flex flex-col gap-4 sticky top-8">
-              <h2 className="font-display text-xl text-canvas-night">Order Summary</h2>
+            <div className="bg-[#ffffff] rounded-[0.5rem] p-6 flex flex-col gap-4 sticky top-8 shadow-[0_4px_15px_rgba(51,69,55,0.06)]">
+              <h2 className="font-['Libre_Caslon_Text'] text-xl font-semibold text-[#1b1c1a]">Order Summary</h2>
 
-              <div className="flex flex-col gap-2 border-b border-hairline-light pb-4">
+              <div className="flex flex-col gap-2 border-b border-[#e3e2df] pb-4">
                 {cart.map(item => (
                   <div key={item.id} className="flex justify-between">
-                    <p className="font-body text-sm text-shade-50">
-                      {item.product?.name} × {item.quantity}
+                    <p className="text-sm text-[#737872]">
+                      {item.product?.name} &times; {item.quantity}
                     </p>
-                    <p className="font-body text-sm text-canvas-night">
+                    <p className="text-sm text-[#1b1c1a]">
                       {new Intl.NumberFormat('id-ID', {
                         style: 'currency',
                         currency: 'IDR',
@@ -211,20 +204,20 @@ function Cart() {
               </div>
 
               <div className="flex justify-between">
-                <p className="font-body text-sm font-medium text-canvas-night">Total</p>
-                <p className="font-body text-sm font-medium text-canvas-night">{formattedTotal}</p>
+                <p className="text-sm font-medium text-[#1b1c1a]">Total</p>
+                <p className="text-sm font-medium text-[#1b1c1a]">{formattedTotal}</p>
               </div>
 
               <Button
                 variant="primary"
-                className="w-full"
+                className="!w-full !bg-[#fe932c] !text-[#ffffff] !rounded-[0.25rem] !font-semibold !tracking-[0.05em] !text-xs !uppercase hover:!bg-[#904d00] !shadow-[0_4px_15px_rgba(51,69,55,0.06)]"
                 onClick={() => navigate('/checkout')}
               >
                 Proceed to Checkout
               </Button>
 
               <Link to="/catalog" className="text-center">
-                <p className="font-body text-sm text-shade-50 hover:text-canvas-night transition-colors">
+                <p className="text-sm text-[#737872] hover:text-[#334537] transition-colors">
                   Continue Shopping
                 </p>
               </Link>

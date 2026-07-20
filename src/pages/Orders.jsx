@@ -2,8 +2,15 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Package, ChevronRight } from 'lucide-react'
 import api from '../api/api'
-import Badge from '../components/ui/Badge'
 import Button from '../components/ui/Button'
+
+const statusStyles = {
+  delivered: 'bg-[#d3e8d5] text-[#0e1f13]',
+  shipped:   'bg-[#c1fbd4] text-[#1b1c1a]',
+  paid:      'bg-[#c1fbd4] text-[#1b1c1a]',
+  pending:   'bg-[#efeeea] text-[#434843]',
+  cancelled: 'bg-[#e3e2df] text-[#434843]',
+}
 
 function Orders() {
   const [orders, setOrders] = useState([])
@@ -33,68 +40,55 @@ function Orders() {
     fetchOrders()
   }, [])
 
-  const getStatusVariant = (status) => {
-    switch (status?.toLowerCase()) {
-      case 'delivered': return 'mint'
-      case 'shipped':   return 'aloe'
-      case 'pending':   return 'default'
-      case 'cancelled': return 'dark'
-      case 'paid':      return 'aloe'
-      default:          return 'default'
-    }
-  }
-
   if (loading) {
     return (
-      <div className="min-h-screen bg-canvas-cream flex items-center justify-center p-4">
-        <p className="font-body text-sm text-shade-50">Loading orders...</p>
+      <div className="min-h-screen bg-[#faf9f5] flex items-center justify-center p-4">
+        <p className="font-['Hanken_Grotesk'] text-sm text-[#737872] animate-pulse">Loading orders...</p>
       </div>
     )
   }
 
   if (orders.length === 0) {
     return (
-      <div className="min-h-screen bg-canvas-cream flex flex-col items-center justify-center gap-6 p-6">
-        <Package size={40} className="text-shade-30" />
+      <div className="min-h-screen bg-[#faf9f5] flex flex-col items-center justify-center gap-6 p-6 font-['Hanken_Grotesk']">
+        <Package size={40} className="text-[#c3c8c1]" />
         <div className="text-center max-w-xs">
-          <h2 className="font-display text-xl sm:text-2xl text-canvas-night">No orders yet</h2>
-          <p className="font-body text-xs sm:text-sm text-shade-50 mt-1">
+          <h2 className="font-['Libre_Caslon_Text'] text-2xl font-semibold text-[#1b1c1a]">No orders yet</h2>
+          <p className="text-sm text-[#737872] mt-1">
             Your order history will appear here
           </p>
         </div>
-        <Link to="/catalog" className="w-full sm:w-auto">
-          <Button variant="primary" className="w-full sm:w-auto">Start Shopping</Button>
+        <Link to="/catalog">
+          <Button variant="primary" className="!bg-[#334537] !text-[#ffffff] !rounded-[0.25rem] !font-semibold !tracking-[0.05em] !text-xs !uppercase !shadow-[0_4px_15px_rgba(51,69,55,0.06)] hover:!bg-[#4a5d4e]">
+            Start Shopping
+          </Button>
         </Link>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-canvas-cream">
-      {/* Pengurangan padding di mobile agar muat lebih banyak konten */}
-      <div className="max-w-3xl mx-auto px-4 sm:px-8 py-6 sm:py-12">
+    <div className="min-h-screen bg-[#faf9f5] font-['Hanken_Grotesk']">
+      <div className="max-w-[1280px] mx-auto px-6 py-12">
 
-        {/* Header */}
-        <div className="mb-6 sm:mb-8">
-          <h1 className="font-display text-2xl sm:text-4xl font-medium text-canvas-night">
+        <div className="mb-8">
+          <h1 className="font-['Libre_Caslon_Text'] text-[32px] font-semibold leading-10 text-[#1b1c1a]">
             Your Orders
           </h1>
-          <p className="font-body text-xs sm:text-sm text-shade-50 mt-1">
+          <p className="text-sm text-[#737872] mt-1">
             {orders.length} order{orders.length > 1 ? 's' : ''} total
           </p>
-          
-          {/* Filters - Menggunakan scroll horizontal halus di HP agar tidak patah ke bawah */}
-          <div className="flex my-6 sm:my-8 items-center gap-2 overflow-x-auto pb-2 scrollbar-none -mx-4 px-4 sm:mx-0 sm:px-0 flex-nowrap sm:flex-wrap">
+
+          <div className="flex my-6 items-center gap-2 overflow-x-auto pb-2 scrollbar-none flex-nowrap sm:flex-wrap">
             {['all', 'pending', 'paid', 'shipped', 'delivered', 'cancelled'].map(status => (
               <button
                 key={status}
                 onClick={() => { setFilter(status); setPage(1) }}
-                className={`
-                  font-body text-xs px-3 py-1.5 rounded-pill border transition-colors capitalize whitespace-nowrap
-                  ${filter === status
-                    ? 'bg-canvas-night text-canvas-light border-canvas-night'
-                    : 'bg-canvas-light text-shade-50 border-hairline-light hover:border-shade-40'}
-                `}
+                className={`text-xs font-semibold tracking-[0.05em] px-4 py-1.5 rounded-[0.25rem] border transition-colors capitalize whitespace-nowrap uppercase ${
+                  filter === status
+                    ? 'bg-[#334537] text-[#ffffff] border-[#334537]'
+                    : 'bg-[#ffffff] text-[#737872] border-[#c3c8c1] hover:border-[#334537] hover:text-[#334537]'
+                }`}
               >
                 {status === 'all' ? 'All' : status}
               </button>
@@ -102,31 +96,29 @@ function Orders() {
           </div>
         </div>
 
-        {/* Orders List */}
-        <div className="flex flex-col gap-3 sm:gap-4">
+        <div className="flex flex-col gap-4 max-w-3xl">
           {paginatedOrders.length === 0 ? (
-            <div className="text-center py-12 bg-canvas-light border border-hairline-light rounded-lg">
-              <p className="font-body text-sm text-shade-50">No {filter} orders found.</p>
+            <div className="text-center py-12 bg-[#ffffff] rounded-[0.5rem] shadow-[0_4px_15px_rgba(51,69,55,0.06)]">
+              <p className="text-sm text-[#737872]">No {filter} orders found.</p>
             </div>
           ) : (
             paginatedOrders.map(order => (
               <Link key={order.id} to={`/orders/${order.id}`}>
-                {/* Layout responsif: Menumpuk vertikal di HP, sejajar horizontal di Desktop */}
-                <div className="bg-canvas-light border border-hairline-light rounded-lg p-4 hover:shadow-md transition-shadow">
+                <div className="bg-[#ffffff] rounded-[0.5rem] p-4 hover:shadow-[0_6px_20px_rgba(51,69,55,0.12)] hover:-translate-y-0.5 transition-all duration-300 shadow-[0_4px_15px_rgba(51,69,55,0.06)]">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div className="flex justify-between items-start sm:block">
                       <div>
-                        <p className="font-body text-[10px] sm:text-xs text-shade-50 font-mono uppercase tracking-wider">
+                        <p className="text-[10px] sm:text-xs font-semibold tracking-[0.05em] text-[#737872] uppercase">
                           #{order.id?.slice(0, 8).toUpperCase()}
                         </p>
-                        <p className="font-body text-base sm:text-sm font-medium text-canvas-night mt-0.5">
+                        <p className="text-base sm:text-sm font-medium text-[#1b1c1a] mt-0.5">
                           {new Intl.NumberFormat('id-ID', {
                             style: 'currency',
                             currency: 'IDR',
                             minimumFractionDigits: 0,
                           }).format(order.totalPrice || 0)}
                         </p>
-                        <p className="font-body text-xs text-shade-50 mt-0.5">
+                        <p className="text-xs text-[#737872] mt-0.5">
                           {new Date(order.createdAt).toLocaleDateString('id-ID', {
                             year: 'numeric',
                             month: 'short',
@@ -134,21 +126,19 @@ function Orders() {
                           })}
                         </p>
                       </div>
-                      
-                      {/* Badge duplikat khusus tampilan HP agar sejajar nama order */}
+
                       <div className="sm:hidden">
-                        <Badge variant={getStatusVariant(order.status)}>
+                        <span className={`inline-block text-[10px] font-semibold tracking-[0.05em] px-3 py-1 rounded-[0.25rem] uppercase ${statusStyles[order.status?.toLowerCase()] || 'bg-[#efeeea] text-[#434843]'}`}>
                           {order.status}
-                        </Badge>
+                        </span>
                       </div>
                     </div>
-                    
-                    {/* Badge & Panah untuk tampilan Desktop */}
+
                     <div className="hidden sm:flex items-center gap-3">
-                      <Badge variant={getStatusVariant(order.status)}>
+                      <span className={`inline-block text-[10px] font-semibold tracking-[0.05em] px-3 py-1 rounded-[0.25rem] uppercase ${statusStyles[order.status?.toLowerCase()] || 'bg-[#efeeea] text-[#434843]'}`}>
                         {order.status}
-                      </Badge>
-                      <ChevronRight size={16} className="text-shade-40" />
+                      </span>
+                      <ChevronRight size={16} className="text-[#737872]" />
                     </div>
                   </div>
                 </div>
@@ -156,23 +146,22 @@ function Orders() {
             ))
           )}
 
-          {/* Pagination - Ukuran tombol diperlebar agar mudah ditekan di HP */}
           {totalPages > 1 && (
             <div className="flex items-center justify-between sm:justify-center gap-4 mt-6">
               <button
                 onClick={() => setPage(p => Math.max(1, p - 1))}
                 disabled={page === 1}
-                className="font-body text-xs sm:text-sm px-4 py-2.5 rounded-pill border border-hairline-light disabled:opacity-40 hover:bg-shade-30 transition-colors bg-canvas-light w-[100px] text-center"
+                className="text-xs sm:text-sm font-semibold tracking-[0.05em] uppercase px-5 py-2.5 rounded-[0.25rem] border border-[#c3c8c1] text-[#434843] hover:border-[#334537] hover:text-[#334537] transition-colors bg-[#ffffff] disabled:opacity-30 disabled:pointer-events-none"
               >
                 Previous
               </button>
-              <span className="font-body text-xs sm:text-sm text-shade-50">
+              <span className="text-xs sm:text-sm text-[#737872] font-medium">
                 {page} / {totalPages}
               </span>
               <button
                 onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                 disabled={page === totalPages}
-                className="font-body text-xs sm:text-sm px-4 py-2.5 rounded-pill border border-hairline-light disabled:opacity-40 hover:bg-shade-30 transition-colors bg-canvas-light w-[100px] text-center"
+                className="text-xs sm:text-sm font-semibold tracking-[0.05em] uppercase px-5 py-2.5 rounded-[0.25rem] border border-[#c3c8c1] text-[#434843] hover:border-[#334537] hover:text-[#334537] transition-colors bg-[#ffffff] disabled:opacity-30 disabled:pointer-events-none"
               >
                 Next
               </button>

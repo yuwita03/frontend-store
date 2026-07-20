@@ -10,7 +10,6 @@ const useAuthStore = create((set) => {
     isAuthenticated: !!localStorage.getItem('token'),
 
     login: (data) => {
-      console.log('LOGIN CALLED', data)
       
       const userData = {
         username: data.username,

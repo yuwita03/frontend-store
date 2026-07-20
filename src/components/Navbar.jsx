@@ -9,127 +9,115 @@ function Navbar() {
   const location = useLocation();
   const { isAuthenticated, logout } = useAuthStore();
 
-  const isDark = location.pathname === '/';
-
-  // Mengelompokkan class dinamis agar sinkron dengan tema stone/minimalis
-  const navBaseClass = `w-full px-8 py-4 flex items-center justify-between transition-colors duration-200 ${
-    isDark 
-      ? 'bg-stone-900 text-stone-50' 
-      : 'bg-white text-stone-900 border-b border-stone-200'
-  }`;
-
-  const mobileMenuClass = `absolute top-16 left-0 w-full z-50 px-8 py-6 flex flex-col gap-4 shadow-lg ${
-    isDark 
-      ? 'bg-stone-900' 
-      : 'bg-white border-b border-stone-200'
-  }`;
+  const isHome = location.pathname === '/';
 
   return (
-    <nav className={navBaseClass}>
-      {/* Logo */}
-      <Link to="/" className="font-serif text-xl font-black tracking-tight">
+    <nav className={`w-full px-6 lg:px-8 py-4 flex items-center justify-between transition-colors duration-200 font-['Hanken_Grotesk'] ${
+      isHome
+        ? 'bg-[#faf9f5]'
+        : 'bg-[#ffffff] border-b border-[#e3e2df]'
+    }`}>
+      <Link to="/" className="font-['Libre_Caslon_Text'] text-xl font-bold text-[#334537] tracking-tight">
         MyStore
       </Link>
 
-      {/* Desktop Navigation Links */}
       <div className="hidden md:flex items-center gap-8">
-        <Link 
-          to="/" 
-          className={`font-mono text-sm transition-colors ${
-            isDark ? 'text-stone-400 hover:text-stone-100' : 'text-stone-600 hover:text-stone-900'
+        <Link
+          to="/"
+          className={`text-sm font-semibold tracking-[0.05em] uppercase transition-colors ${
+            isHome ? 'text-[#5e3819] hover:text-[#334537]' : 'text-[#737872] hover:text-[#334537]'
           }`}
         >
           Home
         </Link>
-        <Link 
-          to="/catalog" 
-          className={`font-mono text-sm transition-colors ${
-            isDark ? 'text-stone-400 hover:text-stone-100' : 'text-stone-600 hover:text-stone-900'
+        <Link
+          to="/catalog"
+          className={`text-sm font-semibold tracking-[0.05em] uppercase transition-colors ${
+            isHome ? 'text-[#5e3819] hover:text-[#334537]' : 'text-[#737872] hover:text-[#334537]'
           }`}
         >
           Catalog
         </Link>
-        <Link 
-          to="/orders" 
-          className={`font-mono text-sm transition-colors ${
-            isDark ? 'text-stone-400 hover:text-stone-100' : 'text-stone-600 hover:text-stone-900'
+        <Link
+          to="/orders"
+          className={`text-sm font-semibold tracking-[0.05em] uppercase transition-colors ${
+            isHome ? 'text-[#5e3819] hover:text-[#334537]' : 'text-[#737872] hover:text-[#334537]'
           }`}
         >
           Orders
         </Link>
       </div>
 
-      {/* Desktop Actions */}
       <div className="hidden md:flex items-center gap-4">
-        <Link to="/cart" className="p-1 hover:opacity-80 transition-opacity">
-          <ShoppingCart size={20} className={isDark ? 'text-stone-50' : 'text-stone-900'} />
+        <Link to="/cart" className="p-1 hover:opacity-70 transition-opacity text-[#334537]">
+          <ShoppingCart size={20} />
         </Link>
-        
+
         {isAuthenticated ? (
-          <Button variant={isDark ? 'outline_dark' : 'outline_light'} onClick={logout}>
+          <Button variant="outline_light" className="!border-[#334537] !text-[#334537] hover:!bg-[#334537] hover:!text-[#ffffff] !rounded-[0.25rem] !font-semibold !tracking-[0.05em] !text-xs !uppercase" onClick={logout}>
             Logout
           </Button>
         ) : (
           <Link to="/login">
-            <Button variant={isDark ? 'outline_dark' : 'outline_light'}>
+            <Button variant="outline_light" className="!border-[#334537] !text-[#334537] hover:!bg-[#334537] hover:!text-[#ffffff] !rounded-[0.25rem] !font-semibold !tracking-[0.05em] !text-xs !uppercase">
               Login
             </Button>
           </Link>
         )}
       </div>
 
-      {/* Hamburger Menu Trigger */}
-      <button 
-        className="md:hidden p-1 focus:outline-none" 
+      <button
+        className="md:hidden p-1 focus:outline-none text-[#334537]"
         onClick={() => setMenuOpen(!menuOpen)}
       >
         {menuOpen ? <X size={20} /> : <Menu size={20} />}
       </button>
 
-      {/* Hamburger Menu Links */}
       {menuOpen && (
-        <div className={`${mobileMenuClass} flex flex-col items-center justify-center text-center gap-4 p-6`}>
-          {/* Navigasi Utama Seluler */}
+        <div className={`absolute top-16 left-0 w-full z-50 px-6 py-8 flex flex-col gap-4 shadow-[0_4px_15px_rgba(51,69,55,0.06)] ${
+          isHome ? 'bg-[#faf9f5]' : 'bg-[#ffffff] border-b border-[#e3e2df]'
+        }`}>
           <div className="flex flex-col items-center gap-4 w-full">
-            <Link 
-              to="/" 
-              onClick={() => setMenuOpen(false)} 
-              className={`font-mono text-base transition-colors py-2 w-full block text-center ${
-                isDark ? 'text-stone-400 hover:text-stone-100' : 'text-stone-600 hover:text-stone-900'
-              }`}
+            <Link
+              to="/"
+              onClick={() => setMenuOpen(false)}
+              className="font-['Hanken_Grotesk'] text-sm font-semibold tracking-[0.05em] uppercase py-2 w-full block text-center text-[#5e3819] hover:text-[#334537] transition-colors"
             >
               Home
             </Link>
-            <Link 
-              to="/catalog" 
-              onClick={() => setMenuOpen(false)} 
-              className={`font-mono text-base transition-colors py-2 w-full block text-center ${
-                isDark ? 'text-stone-400 hover:text-stone-100' : 'text-stone-600 hover:text-stone-900'
-              }`}
+            <Link
+              to="/catalog"
+              onClick={() => setMenuOpen(false)}
+              className="font-['Hanken_Grotesk'] text-sm font-semibold tracking-[0.05em] uppercase py-2 w-full block text-center text-[#5e3819] hover:text-[#334537] transition-colors"
             >
               Catalog
             </Link>
+            <Link
+              to="/orders"
+              onClick={() => setMenuOpen(false)}
+              className="font-['Hanken_Grotesk'] text-sm font-semibold tracking-[0.05em] uppercase py-2 w-full block text-center text-[#5e3819] hover:text-[#334537] transition-colors"
+            >
+              Orders
+            </Link>
           </div>
 
-          {/* Tombol Keranjang Seluler */}
-          <Link to="/cart" onClick={() => setMenuOpen(false)} className="w-full mt-2">
-            <Button variant={isDark ? 'outline_dark' : 'outline_light'} className="w-full mx-auto">
+          <Link to="/cart" onClick={() => setMenuOpen(false)} className="w-full">
+            <Button variant="outline_light" className="!w-full !border-[#334537] !text-[#334537] hover:!bg-[#334537] hover:!text-[#ffffff] !rounded-[0.25rem] !font-semibold !tracking-[0.05em] !text-xs !uppercase">
               Cart
             </Button>
           </Link>
-          
-          {/* Tombol Otentikasi Seluler */}
+
           {isAuthenticated ? (
-            <Button 
-              variant={isDark ? 'outline_dark' : 'outline_light'} 
-              onClick={() => { logout(); setMenuOpen(false); }} 
-              className="w-full mx-auto"
+            <Button
+              variant="outline_light"
+              onClick={() => { logout(); setMenuOpen(false); }}
+              className="!w-full !border-[#334537] !text-[#334537] hover:!bg-[#334537] hover:!text-[#ffffff] !rounded-[0.25rem] !font-semibold !tracking-[0.05em] !text-xs !uppercase"
             >
               Logout
             </Button>
           ) : (
             <Link to="/login" onClick={() => setMenuOpen(false)} className="w-full">
-              <Button variant={isDark ? 'outline_dark' : 'outline_light'} className="w-full mx-auto">
+              <Button variant="outline_light" className="!w-full !border-[#334537] !text-[#334537] hover:!bg-[#334537] hover:!text-[#ffffff] !rounded-[0.25rem] !font-semibold !tracking-[0.05em] !text-xs !uppercase">
                 Login
               </Button>
             </Link>

@@ -1,8 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import api from '../api/api'
-import Button from '../components/ui/Button'
-import Input from '../components/ui/Input'
 
 function Register() {
   const navigate = useNavigate()
@@ -40,76 +38,87 @@ function Register() {
   }
 
   return (
-    <div className="min-h-screen bg-canvas-cream flex items-center justify-center px-4">
+    <div className="min-h-screen bg-[#faf9f5] flex items-center justify-center px-4 font-['Hanken_Grotesk']">
       <div className="w-full max-w-md">
 
-        {/* Header */}
         <div className="mb-8">
-          <h1 className="font-display text-3xl font-medium text-canvas-night">
+          <h1 className="font-['Libre_Caslon_Text'] text-3xl font-semibold text-[#1b1c1a]">
             Create account
           </h1>
-          <p className="font-body text-sm text-shade-50 mt-2">
+          <p className="text-sm text-[#737872] mt-2">
             Join us and start shopping today
           </p>
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
 
-          <Input
-            label="Username"
-            name="username"
-            type="text"
-            placeholder="yourname"
-            value={form.username}
-            onChange={handleChange}
-          />
+          <div>
+            <label className="text-sm font-medium text-[#434843] block mb-1.5">Username</label>
+            <input
+              name="username"
+              type="text"
+              placeholder="yourname"
+              value={form.username}
+              onChange={handleChange}
+              className="w-full text-sm px-4 py-3 rounded-[0.25rem] bg-[#faf9f5] text-[#1b1c1a] placeholder:text-[#c3c8c1] outline-none border border-[#c3c8c1] focus:border-[#334537] transition-colors"
+            />
+          </div>
 
-          <Input
-            label="Full Name"
-            name="name"
-            type="text"
-            placeholder="Your Name"
-            value={form.name}
-            onChange={handleChange}
-          />
+          <div>
+            <label className="text-sm font-medium text-[#434843] block mb-1.5">Full Name</label>
+            <input
+              name="name"
+              type="text"
+              placeholder="Your Name"
+              value={form.name}
+              onChange={handleChange}
+              className="w-full text-sm px-4 py-3 rounded-[0.25rem] bg-[#faf9f5] text-[#1b1c1a] placeholder:text-[#c3c8c1] outline-none border border-[#c3c8c1] focus:border-[#334537] transition-colors"
+            />
+          </div>
 
-          <Input
-            label="Email"
-            name="email"
-            type="email"
-            placeholder="you@example.com"
-            value={form.email}
-            onChange={handleChange}
-          />
+          <div>
+            <label className="text-sm font-medium text-[#434843] block mb-1.5">Email</label>
+            <input
+              name="email"
+              type="email"
+              placeholder="you@example.com"
+              value={form.email}
+              onChange={handleChange}
+              className="w-full text-sm px-4 py-3 rounded-[0.25rem] bg-[#faf9f5] text-[#1b1c1a] placeholder:text-[#c3c8c1] outline-none border border-[#c3c8c1] focus:border-[#334537] transition-colors"
+            />
+          </div>
 
-          <Input
-            label="Password"
-            name="password"
-            type="password"
-            placeholder="••••••••"
-            value={form.password}
-            onChange={handleChange}
-          />
+          <div>
+            <label className="text-sm font-medium text-[#434843] block mb-1.5">Password</label>
+            <input
+              name="password"
+              type="password"
+              placeholder="••••••••"
+              value={form.password}
+              onChange={handleChange}
+              className="w-full text-sm px-4 py-3 rounded-[0.25rem] bg-[#faf9f5] text-[#1b1c1a] placeholder:text-[#c3c8c1] outline-none border border-[#c3c8c1] focus:border-[#334537] transition-colors"
+            />
+          </div>
 
           {error && (
-            <p className="font-body text-sm text-red-500">{error}</p>
+            <p className="text-xs font-semibold tracking-[0.05em] text-[#ba1a1a] uppercase bg-[#ffdad6] p-3 rounded-[0.25rem]">
+              {error}
+            </p>
           )}
 
-          <Button
+          <button
             type="submit"
-            variant="primary"
-            className="w-full mt-2"
+            disabled={loading}
+            className="w-full bg-[#334537] hover:bg-[#4a5d4e] text-[#ffffff] text-xs font-semibold tracking-[0.05em] py-3.5 rounded-[0.25rem] uppercase transition-colors disabled:opacity-40 shadow-[0_4px_15px_rgba(51,69,55,0.06)]"
           >
             {loading ? 'Creating account...' : 'Create account'}
-          </Button>
+          </button>
 
         </form>
 
-        {/* Footer */}
-        <p className="font-body text-sm text-shade-50 mt-6 text-center">
+        <p className="text-sm text-[#737872] mt-8 text-center">
           Already have an account?{' '}
-          <Link to="/login" className="text-canvas-night font-medium hover:underline">
+          <Link to="/login" className="text-[#334537] font-medium hover:text-[#4a5d4e]">
             Sign in
           </Link>
         </p>
